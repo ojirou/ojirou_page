@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Oじろう事務所のホームページ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <style>
+    header {
+      background-color: blue;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    header a {
+      color: white;
+    }
+
+    footer {
+      background-color: #cccccc;
+      color: #444444;
+      text-align: center;
+      padding: 10px;
+    }
+
+    footer p:last-child {
+      text-align: right;
+    }
+
+    nav ul {
+      display: flex;
+    }
+
+    nav li {
+      list-style: none;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .slider .slides {
+      position: absolute;
+      width: 100%;
+      height: 400px;
+      top: 0;
+      left: 0;
+    }
+
+    .slider .slides img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .slider .pager {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+    }
+
+    .slider .pager .page {
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      border-radius: 10px;
+      background-color: #cccccc;
+      cursor: pointer;
+    }
+
+    .slider .pager .page.active {
+      background-color: blue;
+    }
+
+    .slider .controls {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      text-align: center;
+    }
+
+    .slider .controls button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">Oじろう事務所</a></h1>
+    <nav>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="service.html">Service</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="slider">
+    <div class="slides">
+      <img src="image1.jpg" alt="image1">
+      <img src="image2.jpg" alt="image2">
+      <img src="image3.jpg" alt="image3">
+    </div>
+    <div class="pager">
+      <div class="page active"></div>
+      <div class="page"></div>
+      <div class="page"></div>
+    </div>
+    <div class="controls">
+      <button class="prev">&lt;</button>
+      <button class="next">&gt;</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Copyright © 2023 Oじろう事務所</p>
+    <p>
+      <a href="https://twitter.com/ojjjirou">Twitter</a>
+    </p>
+  </footer>
+
+  <script>
+    const slider = document.querySelector('.slider');
+    const slides = document.querySelectorAll('.slides img');
+    const pager = document.querySelector('.pager');
+    const pages = document.querySelectorAll('.page');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+
+    let currentIndex = 0;
+    let slidesLength = slides.length;
+
+    const changeSlide = (index) => {
+      currentIndex = index;
+      slides.forEach((slide) => (slide.style.display = 'none'));
+      slides[currentIndex].style.display = 'block';
+      pages.forEach((page) => page.classList.remove('active'));
+      pages[currentIndex].classList.add('active');
+    };
+
+    const prevSlide = () => {
+      if (currentIndex === 0) {
+        changeSlide(slidesLength - 1);
+      } else {
+        changeSlide(currentIndex - 1);
+      }
+    };
+
+    const nextSlide = () => {
+      if (currentIndex === slidesLength - 1) {
+        changeSlide(0);
+      } else {
+        changeSlide(currentIndex + 1);
+      }
+    };
+
+    // スライドの切り替え
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+
+    // ページャーをクリックしたときのスライド切り替え
+    pager.addEventListener('click', (e) => {
+      const pageIndex = Array.from(pages).indexOf(e.target);
+      if (pageIndex >= 0) {
+        changeSlide(pageIndex);
+      }
+    });
+
+    // スライドの自動切り替え
+    let interval;
+    const autoSlide = () => {
+      interval = setInterval(nextSlide, 3000);
+    };
+    autoSlide();
+
+    // スライドがマウスオーバーされたときの自動切り替えの停止
+    slider.addEventListener('mouseover', () => {
+      clearInterval(interval);
+    });
+
+    // スライドがマウスアウトされたときの自動切り替えの再開
+    slider.addEventListener('mouseout', autoSlide);
+
+  </script>
+</body>
+</html>
